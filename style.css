@@ -1,0 +1,607 @@
+/* ============== المتغيرات ============== */
+:root {
+    --bg-gradient-start: #667eea;
+    --bg-gradient-end: #764ba2;
+    --card-bg: white;
+    --text-primary: #333;
+    --text-secondary: #666;
+    --border-color: #e0e0e0;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    --stat-bg: white;
+    --chart-bg: white;
+    --item-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --input-bg: white;
+    --achievement-bg: linear-gradient(135deg, #FFD700, #FFA500);
+}
+
+/* الثيمات */
+body.theme-ocean {
+    --bg-gradient-start: #006994;
+    --bg-gradient-end: #003B5C;
+    --achievement-bg: linear-gradient(135deg, #00B4D8, #0077B6);
+}
+body.theme-sunset {
+    --bg-gradient-start: #FF512F;
+    --bg-gradient-end: #DD2476;
+    --achievement-bg: linear-gradient(135deg, #FF6B6B, #FF8E53);
+}
+body.theme-forest {
+    --bg-gradient-start: #134E5E;
+    --bg-gradient-end: #71B280;
+    --achievement-bg: linear-gradient(135deg, #2E7D32, #4CAF50);
+}
+body.theme-cherry {
+    --bg-gradient-start: #FF758C;
+    --bg-gradient-end: #FF7EB3;
+    --achievement-bg: linear-gradient(135deg, #FF69B4, #FF1493);
+}
+
+/* الوضع المظلم */
+body.dark-mode {
+    --bg-gradient-start: #1a1a2e;
+    --bg-gradient-end: #16213e;
+    --card-bg: #2d2d44;
+    --text-primary: #f0f0f0;
+    --text-secondary: #cccccc;
+    --border-color: #404060;
+    --stat-bg: #2d2d44;
+    --chart-bg: #2d2d44;
+    --item-bg: linear-gradient(135deg, #3d3d5c 0%, #2d2d44 100%);
+    --input-bg: #3d3d5c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    min-height: 100vh;
+    transition: background 0.5s ease, color 0.3s ease;
+    color: var(--text-primary);
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease;
+}
+
+/* أنيميشن */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* شاشة تسجيل الدخول */
+.auth-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.auth-card {
+    background: var(--card-bg);
+    border-radius: 30px;
+    padding: 40px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.auth-card h1 {
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+.auth-card p {
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.auth-tab.active {
+    border-bottom-color: #764ba2;
+    color: #764ba2;
+}
+
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.auth-submit {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.auth-message {
+    margin-top: 15px;
+    font-size: 0.85rem;
+}
+
+/* زر التثبيت */
+.install-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.install-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+}
+
+/* حالة الاتصال */
+.online-status {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: rgba(76, 175, 80, 0.9);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.online-status.offline {
+    background: rgba(244, 67, 54, 0.9);
+}
+
+/* رأس التطبيق */
+.app-header {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.header-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.control-btn, .language-select, .theme-select {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover, .language-select:hover, .theme-select:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.logout {
+    background: rgba(255, 68, 68, 0.5);
+}
+
+.date {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 5px 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+/* بطاقة الإضافة */
+.gratitude-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.gratitude-card:hover {
+    transform: translateY(-5px);
+}
+
+.sticker-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sticker-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    font-size: 1.5rem;
+    padding: 8px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sticker-btn:hover {
+    transform: scale(1.2);
+}
+
+textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #764ba2;
+}
+
+.rating-picker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.stars {
+    display: flex;
+    gap: 5px;
+}
+
+.stars span {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #ddd;
+}
+
+.stars span.active {
+    color: #FFD700;
+}
+
+.image-upload-label {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+/* البحث */
+.search-bar {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.search-input, .filter-select {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+/* الإحصائيات */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: var(--stat-bg);
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #764ba2;
+}
+
+/* الإنجازات */
+.achievements-section {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.achievements-section h2 {
+    margin-bottom: 15px;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.achievement-badge {
+    text-align: center;
+    padding: 10px;
+    border-radius: 15px;
+    background: var(--achievement-bg);
+    color: white;
+    opacity: 0.5;
+}
+
+.achievement-badge.unlocked {
+    opacity: 1;
+    animation: pulse 0.5s ease;
+}
+
+/* أزرار الإجراءات */
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.action-btn {
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.whatsapp-btn { background: #25D366; }
+.pdf-btn { background: #FF5252; }
+.excel-btn { background: #217346; }
+.email-btn { background: #2196F3; }
+.notification-btn { background: #FF9800; }
+
+/* الرسم البياني */
+.chart-section {
+    background: var(--chart-bg);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+#gratitude-chart {
+    max-height: 250px;
+}
+
+/* قائمة الامتنانات */
+.gratitude-list {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.gratitude-item {
+    background: var(--item-bg);
+    padding: 15px;
+    border-radius: 15px;
+    position: relative;
+    animation: slideIn 0.3s ease;
+}
+
+.gratitude-item.pinned {
+    border: 2px solid #FFD700;
+}
+
+.gratitude-sticker {
+    font-size: 2rem;
+}
+
+.gratitude-rating {
+    margin: 5px 0;
+    color: #FFD700;
+}
+
+.gratitude-image {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.pin-btn {
+    position: absolute;
+    top: 10px;
+    left: 50px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.delete-item {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.reset-btn-full {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+    padding: 12px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+/* إشعارات */
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 10px;
+    z-index: 2000;
+    animation: slideIn 0.3s ease;
+    border-right: 4px solid #4caf50;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* استجابة للشاشات الصغيرة */
+@media (max-width: 600px) {
+    .search-bar {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .stats-section {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .achievements-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .header-controls {
+        gap: 5px;
+    }
+    
+    .control-btn, .language-select, .theme-select {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+}
+
+/* وضع ملء الشاشة في PWA */
+@media (display-mode: standalone) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .app-header {
+        margin-top: env(safe-area-inset-top);
+    }
+}

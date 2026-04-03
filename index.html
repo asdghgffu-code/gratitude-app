@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#764ba2">
+    <meta name="description" content="تطبيق الامتنان اليومي - سجل ما تشعر بالامتنان له وحسّن صحتك النفسية">
+    <meta name="keywords" content="الامتنان, صحة نفسية, تطوير الذات, إيجابية">
+    <meta name="author" content="Gratitude App">
+    
+    <!-- PWA meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="الامتنان">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="تطبيق الامتنان اليومي">
+    <meta property="og:description" content="سجل امتنانك اليومي وحسن صحتك النفسية">
+    <meta property="og:type" content="website">
+    
+    <title>تطبيق الامتنان اليومي | Gratitude App</title>
+    
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- المكتبات -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="body-bg">
+
+    <!-- شاشة تسجيل الدخول -->
+    <div id="auth-screen" class="auth-screen">
+        <div class="auth-card">
+            <h1>🙏 تطبيق الامتنان اليومي</h1>
+            <p>سجل دخولك للبدء</p>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">تسجيل دخول</button>
+                <button class="auth-tab" data-tab="register">إنشاء حساب</button>
+            </div>
+            
+            <div id="login-form" class="auth-form active">
+                <input type="email" id="login-email" placeholder="البريد الإلكتروني" class="auth-input">
+                <input type="password" id="login-password" placeholder="كلمة المرور" class="auth-input">
+                <button id="login-btn" class="auth-submit">دخول</button>
+            </div>
+            
+            <div id="register-form" class="auth-form">
+                <input type="email" id="register-email" placeholder="البريد الإلكتروني" class="auth-input">
+                <input type="password" id="register-password" placeholder="كلمة المرور" class="auth-input">
+                <input type="password" id="register-confirm" placeholder="تأكيد كلمة المرور" class="auth-input">
+                <button id="register-btn" class="auth-submit">إنشاء حساب</button>
+            </div>
+            
+            <div id="auth-message" class="auth-message"></div>
+            
+            <!-- زر التثبيت لـ PWA -->
+            <button id="install-btn" class="install-btn" style="display: none;">📱 تثبيت التطبيق</button>
+        </div>
+    </div>
+
+    <!-- التطبيق الرئيسي -->
+    <div id="app-main" class="container" style="display: none;">
+        <!-- رأس التطبيق -->
+        <header class="app-header">
+            <div class="header-controls">
+                <button id="dark-mode-toggle" class="control-btn" title="الوضع المظلم">🌙</button>
+                <select id="language-select" class="language-select">
+                    <option value="ar">🇸🇦 العربية</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="fr">🇫🇷 Français</option>
+                </select>
+                <select id="theme-select" class="theme-select">
+                    <option value="default">🎨 افتراضي</option>
+                    <option value="ocean">🌊 محيط</option>
+                    <option value="sunset">🌅 غروب</option>
+                    <option value="forest">🌲 غابة</option>
+                    <option value="cherry">🌸 كرز</option>
+                </select>
+                <button id="logout-btn" class="control-btn logout" title="تسجيل خروج">🚪</button>
+            </div>
+            <h1 id="app-title">🙏 تطبيق الامتنان اليومي</h1>
+            <p id="app-subtitle">اكتب شيئًا واحدًا تشعر بالامتنان له اليوم</p>
+            <span class="date" id="current-date"></span>
+        </header>
+
+        <!-- حالة الاتصال بالإنترنت -->
+        <div id="online-status" class="online-status">🟢 متصل</div>
+
+        <!-- بطاقة إضافة الامتنان -->
+        <div class="gratitude-card">
+            <div class="sticker-picker">
+                <button class="sticker-btn" data-sticker="🙏">🙏</button>
+                <button class="sticker-btn" data-sticker="❤️">❤️</button>
+                <button class="sticker-btn" data-sticker="🌟">🌟</button>
+                <button class="sticker-btn" data-sticker="🎉">🎉</button>
+                <button class="sticker-btn" data-sticker="🌈">🌈</button>
+                <button class="sticker-btn" data-sticker="🌸">🌸</button>
+                <button class="sticker-btn" data-sticker="🦋">🦋</button>
+                <button class="sticker-btn" data-sticker="⭐">⭐</button>
+                <button class="sticker-btn" data-sticker="💪">💪</button>
+                <button class="sticker-btn" data-sticker="✨">✨</button>
+            </div>
+            
+            <textarea id="gratitude-input" placeholder="أنا ممتن(ة) اليوم لأن..." rows="4" maxlength="200"></textarea>
+            
+            <div class="rating-picker">
+                <span>التقييم:</span>
+                <div class="stars" id="rating-stars">
+                    <span data-rating="1">☆</span>
+                    <span data-rating="2">☆</span>
+                    <span data-rating="3">☆</span>
+                    <span data-rating="4">☆</span>
+                    <span data-rating="5">☆</span>
+                </div>
+            </div>
+            
+            <div class="image-upload">
+                <label for="gratitude-image" class="image-upload-label">📷 إضافة صورة</label>
+                <input type="file" id="gratitude-image" accept="image/*" style="display: none;">
+                <div id="image-preview" class="image-preview"></div>
+            </div>
+            
+            <div class="input-footer">
+                <span id="char-counter">0/1000</span>
+                <button id="save-btn" class="save-btn">💾 حفظ الامتنان</button>
+            </div>
+        </div>
+
+        <!-- شريط البحث والتصفية -->
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="🔍 بحث في الامتنانات..." class="search-input">
+            <select id="filter-rating" class="filter-select">
+                <option value="all">⭐ كل التقييمات</option>
+                <option value="5">★★★★★ (5)</option>
+                <option value="4">★★★★☆ (4+)</option>
+                <option value="3">★★★☆☆ (3+)</option>
+            </select>
+            <select id="filter-date" class="filter-select">
+                <option value="all">📅 كل الأوقات</option>
+                <option value="week">📅 آخر 7 أيام</option>
+                <option value="month">📅 آخر 30 يوم</option>
+            </select>
+        </div>
+
+        <!-- قسم الإحصائيات -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <span class="stat-icon">🌟</span>
+                <span class="stat-number" id="total-gratitude">0</span>
+                <span class="stat-label">مواقف ممتنة</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🔥</span>
+                <span class="stat-number" id="current-streak">0</span>
+                <span class="stat-label">أيام متتالية</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">💪</span>
+                <span class="stat-number" id="total-days">0</span>
+                <span class="stat-label">إجمالي الأيام</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🏆</span>
+                <span class="stat-number" id="achievements-count">0</span>
+                <span class="stat-label">إنجازات</span>
+            </div>
+        </div>
+
+        <!-- قسم الإنجازات -->
+        <div class="achievements-section">
+            <h2>🏆 الإنجازات</h2>
+            <div id="achievements-list" class="achievements-grid"></div>
+        </div>
+
+        <!-- أزرار الإجراءات -->
+        <div class="action-buttons">
+            <button id="share-whatsapp-btn" class="action-btn whatsapp-btn">📱 واتساب</button>
+            <button id="export-pdf-btn" class="action-btn pdf-btn">📄 PDF</button>
+            <button id="export-excel-btn" class="action-btn excel-btn">📊 Excel</button>
+            <button id="email-report-btn" class="action-btn email-btn">📧 تقرير</button>
+            <button id="notification-btn" class="action-btn notification-btn">🔔 تذكير</button>
+        </div>
+
+        <!-- الرسم البياني -->
+        <div class="chart-section">
+            <h2>📊 إحصائيات الامتنان</h2>
+            <canvas id="gratitude-chart"></canvas>
+            <div class="chart-stats">
+                <span id="avg-weekly">المعدل الأسبوعي: 0</span>
+                <span id="best-day">أفضل يوم: -</span>
+            </div>
+        </div>
+
+        <!-- قائمة الامتنانات -->
+        <div class="gratitude-list">
+            <h2>📝 ذكريات الامتنان</h2>
+            <div id="gratitude-items" class="items-container"></div>
+        </div>
+
+        <!-- زر إعادة الضبط -->
+        <button id="reset-btn" class="reset-btn-full">🗑️ إعادة ضبط التطبيق</button>
+    </div>
+
+    <!-- المؤثرات -->
+    <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000;"></canvas>
+    <audio id="success-sound">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
